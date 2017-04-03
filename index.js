@@ -38,12 +38,12 @@ functions.login(flags.id, flags.pw)
     })
     .then(function (selectedFile) {
 
-        // var path;
-        // if (!flags.downloadPath) {
-        //     path = os.homedir() + '/downloads/klasFileDownloader'
-        // } else {
-        //     path = flags.downloadPath;
-        // }
+        var path;
+        if (!flags.downloadPath) {
+            path = os.homedir() + '/downloads/klasFileDownloader'
+        } else {
+            path = flags.downloadPath;
+        }
         //
         // if (path[path.length - 1] === '/') {
         //     path = path.substr(0, path.length - 1);
