@@ -9,8 +9,6 @@ const readline = require('readline');
 var https = require('https');
 var querystring = require('querystring');
 
-var Iconv = require('iconv').Iconv;
-var iconv = new Iconv('euc-kr', 'utf-8//translit//ignore');
 
 
 var j = request.jar();
@@ -21,11 +19,13 @@ exports.login = function (id, pw) {
         request({
             url: "https://klas.khu.ac.kr/user/loginUser.do",
             method: "POST",
-            form: {USER_ID: id, PASSWORD: pw}
+            form: {USER_ID: id, PASSWORD: pw},
+            timeout: 3000
         }, function (err, res, body) {
-
             if (err) {
-                reject('ERROR');
+                reject('timeout');
+            } else if (j.getCookies("https://klas.khu.ac.kr").length === 0) {
+                reject('login_error');
             } else {
                 resolve(body);
             }
@@ -137,10 +137,50 @@ exports.findFiles = function (classPageBody) {
 
     return new Promise(function (resolve, reject) {
         var $ = cheerio.load(classPageBody);
-        var fileDownAnchors = $('.file-downbox-list > ul > li > a');
+        var fileDownAnchors = $('.mycl_listbox.today');
+
+        var fileArr = [];
+
 
         fileDownAnchors.each(function (i) {
-            console.log($(this).attr('href'));
+            var tempFileArr = [];
+            $(this).find('.mycl_veiw_learnig').find('.file-downbox-list').find('a').each(function (j) {
+                var link = 'https://klas.khu.ac.kr' + $(this).attr('href').split('..')[1];
+
+                tempFileArr.push(link);
+            });
+            fileArr.push(tempFileArr);
         });
+
+        resolve(fileArr);
+    })
+};
+
+exports.getSelectedFiles = function (fileArr, lectureBefore) {
+    return new Promise(function (resolve, reject) {
+        var downloadIndex = fileArr.length - lectureBefore - 1;
+
+        if (downloadIndex < 0) {
+            reject('no reference files');
+        }
+
+        resolve(fileArr[downloadIndex]);
+    })
+};
+
+exports.downloadSelectedFile = function (selectedFile, path) {
+
+    return new Promise(function (resolve, reject) {
+
+        selectedFile.forEach(function (value, index) {
+            request = https.get(value, function (response) {
+                // console.log(response);
+                var file = fs.createWriteStream("./file_" + index + ".pdf");
+                response.pipe(file);
+            });
+            if (index === count - 1) {
+                resolve('done');
+            }
+        })
     })
 };

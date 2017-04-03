@@ -2,6 +2,7 @@
 
 var args = require('args');
 var functions = require('./functions');
+var os = require('os');
 
 args
     .option('id', 'Your Student ID of KHU, Required')
@@ -26,8 +27,30 @@ functions.login(flags.id, flags.pw)
     .then(functions.selectLecture)
     .then(functions.getClassPageBody)
     .then(functions.findFiles)
-    .then(function(result){
-        console.log(result);
+    .then(function (fileArr) {
+        var lectureBefore;
+        if (!flags.lectureBefore) {
+            lectureBefore = 0;
+        } else {
+            lectureBefore = flags.lectureBefore;
+        }
+        return functions.getSelectedFiles(fileArr, lectureBefore);
+    })
+    .then(function (selectedFile) {
+
+        // var path;
+        // if (!flags.downloadPath) {
+        //     path = os.homedir() + '/downloads/klasFileDownloader'
+        // } else {
+        //     path = flags.downloadPath;
+        // }
+        //
+        // if (path[path.length - 1] === '/') {
+        //     path = path.substr(0, path.length - 1);
+        // }
+
+
+        functions.downloadSelectedFile(selectedFile, path)
     })
     .catch(function (err) {
         console.log(err);
