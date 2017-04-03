@@ -1,0 +1,36 @@
+{
+  "name": "klas-file-downloader",
+  "version": "0.0.1",
+  "description": "Project that download lecture reference files from Klas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sungjunyoung/klas-file-downloader.git"
+  },
+  "keywords": [
+    "klas",
+    "file",
+    "download",
+    "lecture"
+  ],
+  "author": "sungjunyoung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sungjunyoung/klas-file-downloader/issues"
+  },
+  "bin": {
+    "klasFileDownloader": "./index.js"
+  },
+  "homepage": "https://sungjunyoung.github.io",
+  "dependencies": {
+    "args": "^2.4.1",
+    "cheerio": "^0.22.0",
+    "iconv": "^2.2.1",
+    "promise": "^7.1.1",
+    "querystring": "^0.2.0",
+    "request": "^2.81.0"
+  }
+}
