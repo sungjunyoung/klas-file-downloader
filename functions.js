@@ -8,6 +8,7 @@ var Promise = require('promise');
 const readline = require('readline');
 var https = require('https');
 var querystring = require('querystring');
+var fs = require('fs');
 
 
 
