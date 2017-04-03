@@ -23,8 +23,11 @@ if (!flags.id) {
 functions.login(flags.id, flags.pw)
     .then(functions.getLecture)
     .then(functions.getLectureLink)
-    .then(function(res){
-        console.log(res);
+    .then(functions.selectLecture)
+    .then(functions.getClassPageBody)
+    .then(functions.findFiles)
+    .then(function(result){
+        console.log(result);
     })
     .catch(function (err) {
         console.log(err);
