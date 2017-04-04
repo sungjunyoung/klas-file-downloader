@@ -11,7 +11,6 @@ var querystring = require('querystring');
 var fs = require('fs');
 
 
-
 var j = request.jar();
 request = request.defaults({jar: j});
 
@@ -147,7 +146,6 @@ exports.findFiles = function (classPageBody) {
             var tempFileArr = [];
             $(this).find('.mycl_veiw_learnig').find('.file-downbox-list').find('a').each(function (j) {
                 var link = 'https://klas.khu.ac.kr' + $(this).attr('href').split('..')[1];
-
                 tempFileArr.push(link);
             });
             fileArr.push(tempFileArr);
@@ -157,8 +155,17 @@ exports.findFiles = function (classPageBody) {
     })
 };
 
-exports.getSelectedFiles = function (fileArr, lectureBefore) {
+exports.getSelectedFiles = function (fileArr, lb) {
+
     return new Promise(function (resolve, reject) {
+
+        var lectureBefore = 0;
+        if(!lb || lb === ''){
+            lectureBefore = 0;
+        } else {
+            lectureBefore = lb;
+        }
+
         var downloadIndex = fileArr.length - lectureBefore - 1;
 
         if (downloadIndex < 0) {
@@ -173,15 +180,29 @@ exports.downloadSelectedFile = function (selectedFile, path) {
 
     return new Promise(function (resolve, reject) {
 
+        var downloadPath;
+        if(!path || path === ''){
+            downloadPath = '';
+            //TODO Default Path 설정하기
+        } else {
+            downloadPath = path;
+            //TODO 사용자가 지정한 path 리포맷하기
+        }
+
+        var count = 0;
         selectedFile.forEach(function (value, index) {
+
             request = https.get(value, function (response) {
-                // console.log(response);
+                count ++;
                 var file = fs.createWriteStream("./file_" + index + ".pdf");
                 response.pipe(file);
+
+                if (index === count) {
+                    resolve('done');
+                }
+
             });
-            if (index === count - 1) {
-                resolve('done');
-            }
+
         })
     })
 };

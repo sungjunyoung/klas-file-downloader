@@ -5,10 +5,10 @@ var functions = require('./functions');
 var os = require('os');
 
 args
-    .option('id', 'Your Student ID of KHU, Required')
-    .option('pw', 'Your Password of KHU, It is never exploited, Required')
-    .option('lectureBefore', '0 is default, 1 2 .. wil download past lecture reference files')
-    .option('downloadPath', 'default ~/Downlaod/Klas, will determine download location')
+    .option('id', '[필수] 학번을 입력합니다.')
+    .option('pw', '[필수] 비밀번호를 입력합니다. 절대 악용되지 않습니다.')
+    .option('lectureBefore', '[선택] 몇번째 전 강좌의 자료를 다운받을지 선택합니다. Default 는 0 입니다.')
+    .option('downloadPath', '[선택] 자료를 다운받을 경로를 선택합니다.');
 
 const flags = args.parse(process.argv);
 
@@ -28,29 +28,10 @@ functions.login(flags.id, flags.pw)
     .then(functions.getClassPageBody)
     .then(functions.findFiles)
     .then(function (fileArr) {
-        var lectureBefore;
-        if (!flags.lectureBefore) {
-            lectureBefore = 0;
-        } else {
-            lectureBefore = flags.lectureBefore;
-        }
-        return functions.getSelectedFiles(fileArr, lectureBefore);
+        return functions.getSelectedFiles(fileArr, flags.lectureBefore);
     })
     .then(function (selectedFile) {
-
-        var path;
-        if (!flags.downloadPath) {
-            path = os.homedir() + '/downloads/klasFileDownloader'
-        } else {
-            path = flags.downloadPath;
-        }
-        //
-        // if (path[path.length - 1] === '/') {
-        //     path = path.substr(0, path.length - 1);
-        // }
-
-
-        functions.downloadSelectedFile(selectedFile, path)
+        functions.downloadSelectedFile(selectedFile, flags.downloadPath);
     })
     .catch(function (err) {
         console.log(err);
