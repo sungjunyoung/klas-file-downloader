@@ -5,7 +5,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var Promise = require('promise');
-const readline = require('readline');
+var readline = require('readline');
 var https = require('https');
 var querystring = require('querystring');
 var fs = require('fs');
@@ -14,6 +14,16 @@ var fs = require('fs');
 var j = request.jar();
 request = request.defaults({jar: j});
 
+
+/**
+ * @author sungjunyoung
+ * @description klas에 로그인해서 세션을 받습니다.
+ *              3초가 넘게 응답이 없으면 klas 서버 오류,
+ *              쿠키를 받지 못했을 경우 로그인 에러를 반환합니다.
+ * @param id
+ * @param pw
+ * @returns {*|Promise}
+ */
 exports.login = function (id, pw) {
     return new Promise(function (resolve, reject) {
         request({
@@ -23,17 +33,22 @@ exports.login = function (id, pw) {
             timeout: 3000
         }, function (err, res, body) {
             if (err) {
-                reject('timeout');
+                reject('클라스 요청 응답시간이 너무 길어요.');
             } else if (j.getCookies("https://klas.khu.ac.kr").length === 0) {
-                reject('login_error');
+                reject('로그인에 실패했습니다!');
             } else {
-                resolve(body);
+                resolve('success');
             }
         })
     });
 };
 
-
+/**
+ * @author sungjunyoung
+ * @description login 세션을 가지고 현재 수강중인 강의 리스트를 보여주는 페이지에 접근합니다.
+ *              해당 페이지의 html 소스를 반환합니다.
+ * @returns {*|Promise}
+ */
 exports.getLecture = function () {
 
     return new Promise(function (resolve, reject) {
@@ -42,7 +57,8 @@ exports.getLecture = function () {
             method: "GET"
         }, function (err, res, body) {
             if (err) {
-                reject(err);
+                console.log(err);
+                reject('파싱 중 에러가 발생했어요!');
             } else {
                 resolve(body);
             }
@@ -50,6 +66,13 @@ exports.getLecture = function () {
     })
 };
 
+/**
+ * @author sungjunyoung
+ * @description getLecture 에서 받은 페이지 소스에서 강의 이름과 강의실로 가는 링크를 파싱합니다.
+ *              lectureLinkList 에 오브젝트 리스트 형태로 결과를 반환합니다.
+ * @param getLectureBody
+ * @returns {*|Promise}
+ */
 exports.getLectureLink = function (getLectureBody) {
 
     return new Promise(function (resolve, reject) {
@@ -71,11 +94,20 @@ exports.getLectureLink = function (getLectureBody) {
             lectureLinkList[i].link = 'https://klas.khu.ac.kr' + $(this).attr('href')
         });
 
+        console.log(lectureLinkList);
         resolve(lectureLinkList);
 
     })
 };
 
+/**
+ * @author sungjunyoung
+ * @description lectureLinkList [{lectureName (string), link (string)}] 를 받고 강의를 선택합니다. 그에대한 강의실 link (string) 를 리턴합니다.
+ * @param {Object[]} lectureLinkList - 강좌명, 강의실을 포함하는 리스트들
+ * @param lectureLinkList[].lectureName - 강의명 [강의코드]
+ * @param lectureLinkList[].link - 강의실 link
+ * @returns {*|Promise}
+ */
 exports.selectLecture = function (lectureLinkList) {
 
     const rl = readline.createInterface({
@@ -129,8 +161,8 @@ exports.getClassPageBody = function (lectureLink) {
             } else {
                 resolve(body);
             }
-        })
-    })
+        });
+    });
 };
 
 exports.findFiles = function (classPageBody) {
@@ -152,7 +184,7 @@ exports.findFiles = function (classPageBody) {
         });
 
         resolve(fileArr);
-    })
+    });
 };
 
 exports.getSelectedFiles = function (fileArr, lb) {
@@ -169,11 +201,11 @@ exports.getSelectedFiles = function (fileArr, lb) {
         var downloadIndex = fileArr.length - lectureBefore - 1;
 
         if (downloadIndex < 0) {
-            reject('no reference files');
+            reject('이 날에는 강의자료가 없네요!');
         }
 
         resolve(fileArr[downloadIndex]);
-    })
+    });
 };
 
 exports.downloadSelectedFile = function (selectedFile, path) {
@@ -203,6 +235,6 @@ exports.downloadSelectedFile = function (selectedFile, path) {
 
             });
 
-        })
-    })
+        });
+    });
 };
