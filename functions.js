@@ -9,11 +9,12 @@ let readline = require('readline');
 let https = require('https');
 let querystring = require('querystring');
 let fs = require('fs');
-
+const os = require('os');
 
 let j = request.jar();
 request = request.defaults({jar: j});
 
+//TODO JSDoc 다시 정리하기
 
 /**
  * @author sungjunyoung
@@ -33,7 +34,7 @@ exports.login = function (id, pw) {
             timeout: 3000
         }, function (err, res, body) {
             if (err) {
-                if(err.code === 'ESOCKETTIMEDOUT'){
+                if (err.code === 'ESOCKETTIMEDOUT') {
                     reject('클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
                 } else {
                     reject('알수없는 에러가 발생했어요!.');
@@ -105,7 +106,8 @@ exports.getLectureLink = function (getLectureBody) {
 
 /**
  * @author sungjunyoung
- * @description lectureLinkList [{lectureName (string), link (string)}] 를 받고 강의를 선택합니다. 그에대한 강의실 link (string) 를 리턴합니다.
+ * @description lectureLinkList [{lectureName (string), link (string)}] 를 받고 강의를 선택합니다.
+ *              그에대한 강의실 link (string) 를 리턴합니다.
  * @param {Object[]} lectureLinkList - 강좌명, 강의실을 포함하는 리스트들
  * @param lectureLinkList[].lectureName - 강의명 [강의코드]
  * @param lectureLinkList[].link - 강의실 link
@@ -167,7 +169,7 @@ exports.getClassPageBody = function (lectureLink) {
             timeout: 3000
         }, function (err, res, body) {
             if (err) {
-                if(err.code === 'ESOCKETTIMEDOUT'){
+                if (err.code === 'ESOCKETTIMEDOUT') {
                     reject('클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
                 } else {
                     reject('알수없는 에러가 발생했어요!.');
@@ -181,7 +183,8 @@ exports.getClassPageBody = function (lectureLink) {
 
 /**
  * @author sungjunyoung
- * @description 강의실 URL 페이지 HTML 을 받아와서 파일 다운로드 링크의 URL 어레이를 리턴 chapterFilesArr[{chapter, files[{link, fileName}]}]
+ * @description 강의실 URL 페이지 HTML 을 받아와서
+ *              파일 다운로드 링크의 URL 어레이를 리턴 chapterFilesArr[{chapter, files[{link, fileName}]}]
  * @param {String} classPageBody - 강의실 URL 의 페이지 HTML
  * @returns {*|Promise}
  */
@@ -210,7 +213,8 @@ exports.findFiles = function (classPageBody) {
 
 /**
  * @author sungjunyoung
- * @description findFiles 의 chapterFilesArr[{chapter, files[{link, fileName}]}] 을 받아 사용자에게 선택하게 하고, 다운받아야 할 강의자료 리스트를 리턴
+ * @description findFiles 의 chapterFilesArr[{chapter, files[{link, fileName}]}] 을 받아
+ *              사용자에게 선택하게 하고, 다운받아야 할 강의자료리스트 오브젝트 {chapter, files[{link, fileName}]} 를 리턴
  * @param {String} chapterFilesArr - 챕터별로 파일들과 파일 명의 리스트를 가지고 있는 리스트
  * @returns {*|Promise}
  */
@@ -240,29 +244,31 @@ exports.selectChapter = function (chapterFilesArr) {
     });
 };
 
-exports.downloadSelectedFile = function (selectedFile, path) {
+/**
+ * @author sungjunyoung
+ * @description
+ * @param selectedFiles - 다운로드할 챕터 오브젝트
+ * @param downloadPath - 다운로드 경로
+ * @returns {*|Promise}
+ */
+exports.downloadSelectedFiles = function (selectedFiles, downloadPath) {
 
     return new Promise(function (resolve, reject) {
-
-        let downloadPath;
-        if (!path || path === '') {
-            downloadPath = '';
-            //TODO Default Path 설정하기
+        if (!downloadPath) {
+            downloadPath = os.homedir() + '/Downloads/';
         } else {
-            downloadPath = path;
-            //TODO 사용자가 지정한 path 리포맷하기
+            downloadPath = require('path').resolve(downloadPath);
         }
 
         let count = 0;
-        selectedFile.forEach(function (value, index) {
-
-            request = https.get(value, function (response) {
+        selectedFiles.files.forEach(function (value, index) {
+            request = https.get(value.link, function (response) {
                 count++;
-                let file = fs.createWriteStream("./file_" + index + ".pdf");
+                let file = fs.createWriteStream(downloadPath + value.fileName);
                 response.pipe(file);
 
                 if (index === count) {
-                    resolve('done');
+                    resolve('파일이 ' + downloadPath + ' 에 저장되었어요! 열공 :)');
                 }
 
             });

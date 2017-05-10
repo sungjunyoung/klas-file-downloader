@@ -30,8 +30,11 @@ if(require.main === module){
             .then(functions.getClassPageBody)
             .then(functions.findFiles)
             .then(functions.selectChapter)
-            .then(function(res){
-                console.log(res);
+            .then(function(selectedFiles){
+                return functions.downloadSelectedFiles(selectedFiles, flags.downloadPath);
+            })
+            .then(function(result){
+                console.log(result);
             })
             .catch(function (err) {
                 console.log(err);
