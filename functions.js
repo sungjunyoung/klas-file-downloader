@@ -2,16 +2,16 @@
  * Created by junyoung on 2017. 4. 2..
  */
 
-var request = require('request');
-var cheerio = require('cheerio');
-var Promise = require('promise');
-var readline = require('readline');
-var https = require('https');
-var querystring = require('querystring');
-var fs = require('fs');
+let request = require('request');
+let cheerio = require('cheerio');
+let Promise = require('promise');
+let readline = require('readline');
+let https = require('https');
+let querystring = require('querystring');
+let fs = require('fs');
 
 
-var j = request.jar();
+let j = request.jar();
 request = request.defaults({jar: j});
 
 
@@ -33,7 +33,11 @@ exports.login = function (id, pw) {
             timeout: 3000
         }, function (err, res, body) {
             if (err) {
-                reject('클라스 요청 응답시간이 너무 길어요.');
+                if(err.code === 'ESOCKETTIMEDOUT'){
+                    reject('클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
+                } else {
+                    reject('알수없는 에러가 발생했어요!.');
+                }
             } else if (j.getCookies("https://klas.khu.ac.kr").length === 0) {
                 reject('로그인에 실패했습니다!');
             } else {
@@ -76,11 +80,11 @@ exports.getLecture = function () {
 exports.getLectureLink = function (getLectureBody) {
 
     return new Promise(function (resolve, reject) {
-        var $ = cheerio.load(getLectureBody);
-        var lectureLinks = $('.gomy_class');
-        var tableTrs = $('#tbl > tbody > tr > td');
+        let $ = cheerio.load(getLectureBody);
+        let lectureLinks = $('.gomy_class');
+        let tableTrs = $('#tbl > tbody > tr > td');
 
-        var lectureLinkList = [];
+        let lectureLinkList = [];
 
         tableTrs.each(function (i) {
             if (i % 7 === 1) {
@@ -94,7 +98,6 @@ exports.getLectureLink = function (getLectureBody) {
             lectureLinkList[i].link = 'https://klas.khu.ac.kr' + $(this).attr('href')
         });
 
-        console.log(lectureLinkList);
         resolve(lectureLinkList);
 
     })
@@ -114,13 +117,13 @@ exports.selectLecture = function (lectureLinkList) {
         input: process.stdin,
         output: process.stdout
     });
-    var selectQuestion = '';
-    selectQuestion += '\n  강의자료를 다운받을 강의를 선택해 주세요  \n';
-    var count = 0;
+    let selectQuestion = '';
+    selectQuestion += '\n  강의자료를 다운받을 강의를 선택해 주세요 :D\n\n';
+    let count = 0;
 
     return new Promise(function (resolve, reject) {
 
-        for (var i in lectureLinkList) {
+        for (let i in lectureLinkList) {
             count += 1;
             selectQuestion += '    ' + count + '. ' + lectureLinkList[i].lectureName + '\n';
         }
@@ -139,13 +142,19 @@ exports.selectLecture = function (lectureLinkList) {
 
 };
 
+/**
+ * @author sungjunyoung
+ * @description 강의실 링크의 url 을 받아서 HTML 를 리턴해주는 함수
+ * @param {String} lectureLink - 강의실 URL
+ * @returns {*|Promise}
+ */
 exports.getClassPageBody = function (lectureLink) {
 
     return new Promise(function (resolve, reject) {
 
-        var url = lectureLink.link;
+        let url = lectureLink.link;
 
-        var headers = {
+        let headers = {
             'Cookie': 'COURSE_MENU_NAME=%uAC15%uC758%uC2E4',
             'User-Agent': 'request'
         };
@@ -154,10 +163,15 @@ exports.getClassPageBody = function (lectureLink) {
             url: url,
             mothod: 'GET',
             jar: j,
-            headers: headers
+            headers: headers,
+            timeout: 3000
         }, function (err, res, body) {
             if (err) {
-                reject(err);
+                if(err.code === 'ESOCKETTIMEDOUT'){
+                    reject('클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
+                } else {
+                    reject('알수없는 에러가 발생했어요!.');
+                }
             } else {
                 resolve(body);
             }
@@ -165,46 +179,64 @@ exports.getClassPageBody = function (lectureLink) {
     });
 };
 
+/**
+ * @author sungjunyoung
+ * @description 강의실 URL 페이지 HTML 을 받아와서 파일 다운로드 링크의 URL 어레이를 리턴 chapterFilesArr[{chapter, files[{link, fileName}]}]
+ * @param {String} classPageBody - 강의실 URL 의 페이지 HTML
+ * @returns {*|Promise}
+ */
 exports.findFiles = function (classPageBody) {
 
     return new Promise(function (resolve, reject) {
-        var $ = cheerio.load(classPageBody);
-        var fileDownAnchors = $('.mycl_listbox.today');
+        let $ = cheerio.load(classPageBody);
+        let fileDownAnchors = $('.mycl_listbox.today');
 
-        var fileArr = [];
-
+        let chapterFilesArr = [];
 
         fileDownAnchors.each(function (i) {
-            var tempFileArr = [];
+            let chapter = $(this).find('.lf').text();
+            let tempChapterObj = {chapter: chapter, files: []};
             $(this).find('.mycl_veiw_learnig').find('.file-downbox-list').find('a').each(function (j) {
-                var link = 'https://klas.khu.ac.kr' + $(this).attr('href').split('..')[1];
-                tempFileArr.push(link);
+                let link = 'https://klas.khu.ac.kr' + $(this).attr('href').split('..')[1];
+                let fileName = $(this).text();
+                tempChapterObj.files.push({link: link, fileName: fileName});
             });
-            fileArr.push(tempFileArr);
+            chapterFilesArr.push(tempChapterObj);
         });
 
-        resolve(fileArr);
+        resolve(chapterFilesArr);
     });
 };
 
-exports.getSelectedFiles = function (fileArr, lb) {
+/**
+ * @author sungjunyoung
+ * @description findFiles 의 chapterFilesArr[{chapter, files[{link, fileName}]}] 을 받아 사용자에게 선택하게 하고, 다운받아야 할 강의자료 리스트를 리턴
+ * @param {String} chapterFilesArr - 챕터별로 파일들과 파일 명의 리스트를 가지고 있는 리스트
+ * @returns {*|Promise}
+ */
+exports.selectChapter = function (chapterFilesArr) {
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+    let selectQuestion = '';
+    selectQuestion += '\n 강의자료를 다운받을 챕터를 선택해 주세요 :)  \n\n';
+    let counter = 0;
+    for (let i in chapterFilesArr) {
+        counter = i * 1 + 1;
+        selectQuestion += '     ' + counter + '. ' + chapterFilesArr[i].chapter;
+        selectQuestion += '\n';
+    }
+    selectQuestion += '\n';
+    selectQuestion += '  입력 (1 ~ ' + counter + ') : ';
 
     return new Promise(function (resolve, reject) {
-
-        var lectureBefore = 0;
-        if(!lb || lb === ''){
-            lectureBefore = 0;
-        } else {
-            lectureBefore = lb;
-        }
-
-        var downloadIndex = fileArr.length - lectureBefore - 1;
-
-        if (downloadIndex < 0) {
-            reject('이 날에는 강의자료가 없네요!');
-        }
-
-        resolve(fileArr[downloadIndex]);
+        rl.question(selectQuestion, (answer) => {
+            answer = parseInt(answer) - 1;
+            resolve(chapterFilesArr[answer]);
+            rl.close();
+        });
     });
 };
 
@@ -212,8 +244,8 @@ exports.downloadSelectedFile = function (selectedFile, path) {
 
     return new Promise(function (resolve, reject) {
 
-        var downloadPath;
-        if(!path || path === ''){
+        let downloadPath;
+        if (!path || path === '') {
             downloadPath = '';
             //TODO Default Path 설정하기
         } else {
@@ -221,12 +253,12 @@ exports.downloadSelectedFile = function (selectedFile, path) {
             //TODO 사용자가 지정한 path 리포맷하기
         }
 
-        var count = 0;
+        let count = 0;
         selectedFile.forEach(function (value, index) {
 
             request = https.get(value, function (response) {
-                count ++;
-                var file = fs.createWriteStream("./file_" + index + ".pdf");
+                count++;
+                let file = fs.createWriteStream("./file_" + index + ".pdf");
                 response.pipe(file);
 
                 if (index === count) {

@@ -11,7 +11,7 @@ if(require.main === module){
 
     args
         .option('id', '[필수] 학번을 입력합니다.')
-        .option('pw', '[필수] 비밀번호를 입력합니다. 로컬 PC 에서만 사용하기 때문에 안전합니다 ^^.')
+        .option('pw', '[필수] 비밀번호를 입력합니다. 로컬 PC 에서만 사용하기 때문에 안전합니다 :).')
         .option('downloadPath', '[선택] 자료를 다운받을 경로를 입력합니다. (default 는 ~/Downloads 입니다.)');
 
     const flags = args.parse(process.argv);
@@ -29,12 +29,9 @@ if(require.main === module){
             .then(functions.selectLecture)
             .then(functions.getClassPageBody)
             .then(functions.findFiles)
-            .then(function (fileArr) {
-                return functions.getSelectedFiles(fileArr, flags.lectureBefore);
-            })
-            .then(function (selectedFile) {
-                // console.log(selectedFile);
-                functions.downloadSelectedFile(selectedFile);
+            .then(functions.selectChapter)
+            .then(function(res){
+                console.log(res);
             })
             .catch(function (err) {
                 console.log(err);
