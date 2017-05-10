@@ -5,6 +5,7 @@ var functions = require('./functions');
 // var os = require('os');
 
 
+//TODO 예외처리
 
 if(require.main === module){
     // 커멘드 라인 상에서 직접적으로 불려졌을 때
@@ -12,7 +13,8 @@ if(require.main === module){
     args
         .option('id', '[필수] 학번을 입력합니다.')
         .option('pw', '[필수] 비밀번호를 입력합니다. 로컬 PC 에서만 사용하기 때문에 안전합니다 :).')
-        .option('downloadPath', '[선택] 자료를 다운받을 경로를 입력합니다. (default 는 ~/Downloads 입니다.)');
+        .option('downloadPath', '[선택] 자료를 다운받을 경로를 입력합니다. (default 는 ~/Downloads 입니다.)')
+        .option('all', '[선택] 다음 옵션을 주면 모든 강의의 자료를 다운받습니다.');
 
     const flags = args.parse(process.argv);
 
@@ -29,7 +31,14 @@ if(require.main === module){
             .then(functions.selectLecture)
             .then(functions.getClassPageBody)
             .then(functions.findFiles)
-            .then(functions.selectChapter)
+            .then(function(chapterFilesArr){
+                if(flags.all){
+                    // TODO 전체강의 다운받는 함수 구현
+                } else {
+                    return functions.selectChapter(chapterFilesArr);
+                }
+
+            })
             .then(function(selectedFiles){
                 return functions.downloadSelectedFiles(selectedFiles, flags.downloadPath);
             })
