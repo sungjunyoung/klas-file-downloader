@@ -19,10 +19,10 @@ if(require.main === module){
     const flags = args.parse(process.argv);
 
     if (!flags.id) {
-        console.log('학번(id) 가 필요해요!');
+        console.log('  학번(id) 가 필요해요!');
         return;
     } else if (!flags.pw) {
-        console.log('비밀번호(pw) 가 필요해요!');
+        console.log('  비밀번호(pw) 가 필요해요!');
         return;
     } else {
         functions.login(flags.id, flags.pw)

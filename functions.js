@@ -9,13 +9,13 @@ let readline = require('readline');
 let https = require('https');
 let querystring = require('querystring');
 let fs = require('fs');
+let read = require('read');
 const os = require('os');
 
 let j = request.jar();
 request = request.defaults({jar: j});
 
 //TODO JSDoc 다시 정리하기
-
 /**
  * @author sungjunyoung
  * @description klas에 로그인해서 세션을 받습니다.
@@ -35,12 +35,12 @@ exports.login = function (id, pw) {
         }, function (err, res, body) {
             if (err) {
                 if (err.code === 'ESOCKETTIMEDOUT') {
-                    reject('클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
+                    reject('  클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
                 } else {
-                    reject('알수없는 에러가 발생했어요!.');
+                    reject('  알수없는 에러가 발생했어요!.');
                 }
             } else if (j.getCookies("https://klas.khu.ac.kr").length === 0) {
-                reject('로그인에 실패했습니다!');
+                reject('  로그인에 실패했습니다!');
             } else {
                 resolve('success');
             }
@@ -63,7 +63,7 @@ exports.getLecture = function () {
         }, function (err, res, body) {
             if (err) {
                 console.log(err);
-                reject('파싱 중 에러가 발생했어요!');
+                reject('  파싱 중 에러가 발생했어요!');
             } else {
                 resolve(body);
             }
@@ -170,9 +170,9 @@ exports.getClassPageBody = function (lectureLink) {
         }, function (err, res, body) {
             if (err) {
                 if (err.code === 'ESOCKETTIMEDOUT') {
-                    reject('클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
+                    reject('  클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
                 } else {
-                    reject('알수없는 에러가 발생했어요!.');
+                    reject('  알수없는 에러가 발생했어요!.');
                 }
             } else {
                 resolve(body);
@@ -257,8 +257,9 @@ exports.downloadSelectedFiles = function (selectedFiles, downloadPath) {
         if (!downloadPath) {
             downloadPath = os.homedir() + '/Downloads/';
         } else {
-            downloadPath = require('path').resolve(downloadPath);
+            downloadPath = require('path').resolve(downloadPath) + '/';
         }
+
 
         let count = 0;
         selectedFiles.files.forEach(function (value, index) {
@@ -267,8 +268,8 @@ exports.downloadSelectedFiles = function (selectedFiles, downloadPath) {
                 let file = fs.createWriteStream(downloadPath + value.fileName);
                 response.pipe(file);
 
-                if (index === count) {
-                    resolve('파일이 ' + downloadPath + ' 에 저장되었어요! 열공 :)');
+                if (selectedFiles.files.length === count) {
+                    resolve('\n  파일이 ' + downloadPath + ' 에 저장되었어요! 열공 :)');
                 }
 
             });
