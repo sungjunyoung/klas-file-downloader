@@ -20,14 +20,18 @@ npm install -g klas-file-downloader
 > **WARNING!!** 패스워드가 @ 이외의 특수문자를 포함하고 있다면, 패스워드 앞에  \ 를 붙여주어야 합니다. 
 
 ```
+[DOWNLOAD SPECIPIC CHAPTER FILES]
 klasFM -i 2012104095 -p \!123123\*123
+
+[TO DOWNLOAD ALL FILES IN LECTURE]
+klasFM -i 2012104095 -p \!123123\*123 --all
 ```
 
 ### Options
 #### Global Options
 0. `-h / --help` : 도움말
-1. `-i / --id` : [required] 학번
-2. `-p / --pw` : [required] 비밀번호
+1. `-i / --id` : **[required]** 학번
+2. `-p / --pw` : **[required]** 비밀번호
 3. `-d / --downloadPath` : 다운로드 받을 경로
 4. `-a / --all` : 추가 시 선택한 강의의 전체 강의자료 다운로드
 

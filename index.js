@@ -7,7 +7,7 @@ var functions = require('./functions');
 
 //TODO 예외처리
 
-if(require.main === module){
+if (require.main === module) {
     // 커멘드 라인 상에서 직접적으로 불려졌을 때
 
     args
@@ -25,46 +25,68 @@ if(require.main === module){
         console.log('  비밀번호(pw) 가 필요해요!');
         return;
     } else {
-        functions.login(flags.id, flags.pw)
-            .then(functions.getLecture)
-            .then(functions.getLectureLink)
-            .then(functions.selectLecture)
-            .then(functions.getClassPageBody)
-            .then(functions.findFiles)
-            .then(function(chapterFilesArr){
-                if(flags.all){
-                    // TODO 전체강의 다운받는 함수 구현
-                } else {
-                    return functions.selectChapter(chapterFilesArr);
-                }
+        if (!flags.all) {
+            functions.login(flags.id, flags.pw)
+                .then(functions.getLecture)
+                .then(functions.getLectureLink)
+                .then(functions.selectLecture)
+                .then(functions.getClassPageBody)
+                .then(functions.findFiles)
+                .then(functions.selectChapter)
+                .then(function (selectedFiles) {
+                    return functions.downloadSelectedFiles(selectedFiles, flags.downloadPath);
+                })
+                .then(function (result) {
+                    console.log(result);
+                    process.exit();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    process.exit();
+                });
+        } else {
+            var selectLecture;
+            functions.login(flags.id, flags.pw)
+                .then(functions.getLecture)
+                .then(functions.getLectureLink)
+                .then(functions.selectLecture)
+                .then(function (lectureObject) {
+                    selectLecture = lectureObject.lectureName;
+                    return functions.getClassPageBody(lectureObject);
+                })
+                .then(functions.findFiles)
+                .then(function (chapterFilesArr) {
+                    return functions.downloadAllFiles(chapterFilesArr, selectLecture, flags.downloadPath);
+                })
+                .then(function(result){
+                    console.log(result);
+                    process.exit();
+                })
+                .catch(function(err){
+                    console.log(err);
+                    process.exit();
+                })
 
-            })
-            .then(function(selectedFiles){
-                return functions.downloadSelectedFiles(selectedFiles, flags.downloadPath);
-            })
-            .then(function(result){
-                console.log(result);
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
+        }
+
+
     }
 
 } else {
     // 모듈로 불려졌을때 (준비중)
 
-    // module.exports = {
-    //
-    //     getLectureList: function (id, pw, callback) {
-    //         functions.login(id, pw)
-    //             .then(functions.getLecture)
-    //             .then(functions.getLectureLink)
-    //             .then(function(lectureList){
-    //                 callback(lectureList);
-    //             })
-    //     }
-    //
-    // };
+    module.exports = {
+
+        getLectures: function (id, pw, callback) {
+            functions.login(id, pw)
+                .then(functions.getLecture)
+                .then(functions.getLectureLink)
+                .then(function (lectureList) {
+                    callback(lectureList);
+                })
+        }
+
+    };
 
 }
 

@@ -254,6 +254,7 @@ exports.selectChapter = function (chapterFilesArr) {
 exports.downloadSelectedFiles = function (selectedFiles, downloadPath) {
 
     return new Promise(function (resolve, reject) {
+
         if (!downloadPath) {
             downloadPath = os.homedir() + '/Downloads/';
         } else {
@@ -276,4 +277,45 @@ exports.downloadSelectedFiles = function (selectedFiles, downloadPath) {
 
         });
     });
+};
+
+
+exports.downloadAllFiles = function (chapterFilesArr,selectLecture, downloadPath) {
+
+    return new Promise(function (resolve, reject) {
+
+        if (!downloadPath) {
+            downloadPath = os.homedir() + '/Downloads/';
+        } else {
+            downloadPath = require('path').resolve(downloadPath) + '/';
+        }
+
+        fs.mkdirSync(downloadPath + selectLecture + '/');
+        downloadPath += selectLecture + '/';
+        console.log('');
+
+        let count = 0;
+        chapterFilesArr.forEach(function(chapterObj, index){
+            var asyncDownloadPath = downloadPath + chapterObj.chapter + '/';
+            fs.mkdirSync(asyncDownloadPath);
+
+            var subCount = 0;
+            chapterObj.files.forEach(function(value, index){
+                request = https.get(value.link, function(response){
+                    let file = fs.createWriteStream(asyncDownloadPath + value.fileName);
+                    response.pipe(file);
+
+                    subCount ++;
+                    if(subCount === chapterObj.files.length){
+                        count ++;
+                        console.log('   다운로드중... ('+ asyncDownloadPath +')');
+                        if(count === chapterFilesArr.length){
+                            resolve('\n  파일이 ' + downloadPath + ' 에 저장되었어요! 열공 :)');
+                        }
+                    }
+                })
+            });
+        });
+
+    })
 };
