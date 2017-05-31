@@ -282,10 +282,10 @@ exports.downloadSelectedFiles = function (selectedFiles, selectLecture, download
         let count = 0;
         selectedFiles.files.forEach(function (value, index) {
             request = https.get(value.link, function (response) {
-                count++;
+
                 let file = fs.createWriteStream(downloadPath + value.fileName);
                 response.pipe(file);
-
+                count++;
                 if (selectedFiles.files.length === count) {
                     resolve('\n  파일이 ' + downloadPath + ' 에 저장되었어요! 열공 :)');
                 }

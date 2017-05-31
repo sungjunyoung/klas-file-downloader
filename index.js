@@ -41,11 +41,9 @@ if (require.main === module) {
                 })
                 .then(function (result) {
                     console.log(result);
-                    process.exit();
                 })
                 .catch(function (err) {
                     console.log(err);
-                    process.exit();
                 });
         } else {
             var selectLecture;
@@ -63,11 +61,9 @@ if (require.main === module) {
                 })
                 .then(function (result) {
                     console.log(result);
-                    process.exit();
                 })
                 .catch(function (err) {
                     console.log(err);
-                    process.exit();
                 })
 
         }
