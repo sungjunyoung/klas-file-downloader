@@ -134,7 +134,10 @@ exports.selectLecture = function (lectureLinkList) {
 
 
         rl.question(selectQuestion, (answer) => {
-
+            if (new RegExp('[1-' + count + ']').test(answer) === false) {
+                console.log('\n  올바른 값을 입력해주세요!!');
+                process.exit();
+            }
             answer = parseInt(answer) - 1;
             resolve(lectureLinkList[answer]);
 
@@ -237,6 +240,10 @@ exports.selectChapter = function (chapterFilesArr) {
 
     return new Promise(function (resolve, reject) {
         rl.question(selectQuestion, (answer) => {
+            if (new RegExp('[1-' + counter + ']').test(answer) === false) {
+                console.log('\n  올바른 값을 입력해주세요!!');
+                process.exit();
+            }
             answer = parseInt(answer) - 1;
             resolve(chapterFilesArr[answer]);
             rl.close();
@@ -261,7 +268,6 @@ exports.downloadSelectedFiles = function (selectedFiles, selectLecture, download
         } else {
             downloadPath = require('path').resolve(downloadPath) + '/';
         }
-
 
 
         // 다운로드 경로 설정
