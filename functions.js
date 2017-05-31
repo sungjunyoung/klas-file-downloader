@@ -248,10 +248,11 @@ exports.selectChapter = function (chapterFilesArr) {
  * @author sungjunyoung
  * @description
  * @param selectedFiles - 다운로드할 챕터 오브젝트
+ * @param selectLecture - 선택된 강의명
  * @param downloadPath - 다운로드 경로
  * @returns {*|Promise}
  */
-exports.downloadSelectedFiles = function (selectedFiles, downloadPath) {
+exports.downloadSelectedFiles = function (selectedFiles, selectLecture, downloadPath) {
 
     return new Promise(function (resolve, reject) {
 
@@ -261,6 +262,16 @@ exports.downloadSelectedFiles = function (selectedFiles, downloadPath) {
             downloadPath = require('path').resolve(downloadPath) + '/';
         }
 
+
+
+        // 다운로드 경로 설정
+        if (!fs.existsSync(downloadPath + selectLecture + '/'))
+            fs.mkdirSync(downloadPath + selectLecture + '/');
+        downloadPath += selectLecture + '/';
+
+        if (!fs.existsSync(downloadPath + selectedFiles.chapter + '/'))
+            fs.mkdirSync(downloadPath + selectedFiles.chapter + '/');
+        downloadPath += selectedFiles.chapter + '/';
 
         let count = 0;
         selectedFiles.files.forEach(function (value, index) {
@@ -279,8 +290,12 @@ exports.downloadSelectedFiles = function (selectedFiles, downloadPath) {
     });
 };
 
-
-exports.downloadAllFiles = function (chapterFilesArr,selectLecture, downloadPath) {
+/**
+ * @author sungjunyoung
+ * @description 해당 강의에 대한 모든 강의자료를 다운로드합니다.
+ * @returns {*|Promise}
+ */
+exports.downloadAllFiles = function (chapterFilesArr, selectLecture, downloadPath) {
 
     return new Promise(function (resolve, reject) {
 
@@ -290,26 +305,29 @@ exports.downloadAllFiles = function (chapterFilesArr,selectLecture, downloadPath
             downloadPath = require('path').resolve(downloadPath) + '/';
         }
 
-        fs.mkdirSync(downloadPath + selectLecture + '/');
+        if (!fs.existsSync(downloadPath + selectLecture + '/'))
+            fs.mkdirSync(downloadPath + selectLecture + '/');
         downloadPath += selectLecture + '/';
         console.log('');
 
         let count = 0;
-        chapterFilesArr.forEach(function(chapterObj, index){
+        chapterFilesArr.forEach(function (chapterObj, index) {
             var asyncDownloadPath = downloadPath + chapterObj.chapter + '/';
-            fs.mkdirSync(asyncDownloadPath);
+
+            if (!fs.existsSync(asyncDownloadPath))
+                fs.mkdirSync(asyncDownloadPath);
 
             var subCount = 0;
-            chapterObj.files.forEach(function(value, index){
-                request = https.get(value.link, function(response){
+            chapterObj.files.forEach(function (value, index) {
+                request = https.get(value.link, function (response) {
                     let file = fs.createWriteStream(asyncDownloadPath + value.fileName);
                     response.pipe(file);
 
-                    subCount ++;
-                    if(subCount === chapterObj.files.length){
-                        count ++;
-                        console.log('   다운로드중... ('+ asyncDownloadPath +')');
-                        if(count === chapterFilesArr.length){
+                    subCount++;
+                    if (subCount === chapterObj.files.length) {
+                        count++;
+                        console.log('   다운로드중... (' + asyncDownloadPath + ')');
+                        if (count === chapterFilesArr.length) {
                             resolve('\n  파일이 ' + downloadPath + ' 에 저장되었어요! 열공 :)');
                         }
                     }

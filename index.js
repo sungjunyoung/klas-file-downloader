@@ -30,11 +30,14 @@ if (require.main === module) {
                 .then(functions.getLecture)
                 .then(functions.getLectureLink)
                 .then(functions.selectLecture)
-                .then(functions.getClassPageBody)
+                .then(function (lectureObject) {
+                    selectLecture = lectureObject.lectureName;
+                    return functions.getClassPageBody(lectureObject);
+                })
                 .then(functions.findFiles)
                 .then(functions.selectChapter)
                 .then(function (selectedFiles) {
-                    return functions.downloadSelectedFiles(selectedFiles, flags.downloadPath);
+                    return functions.downloadSelectedFiles(selectedFiles, selectLecture, flags.downloadPath);
                 })
                 .then(function (result) {
                     console.log(result);
@@ -58,11 +61,11 @@ if (require.main === module) {
                 .then(function (chapterFilesArr) {
                     return functions.downloadAllFiles(chapterFilesArr, selectLecture, flags.downloadPath);
                 })
-                .then(function(result){
+                .then(function (result) {
                     console.log(result);
                     process.exit();
                 })
-                .catch(function(err){
+                .catch(function (err) {
                     console.log(err);
                     process.exit();
                 })
