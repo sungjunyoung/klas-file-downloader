@@ -1,6 +1,3 @@
-
-> # **IN-DEVELOPING**
-
 # klas-file-downloader
 
 경희대학교 클라스의 강의실 페이지에서 강의자료를 다운받는 npm 패키지입니다.
