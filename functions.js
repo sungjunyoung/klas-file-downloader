@@ -137,6 +137,9 @@ exports.selectLecture = function (lectureLinkList) {
             if (new RegExp('[1-' + count + ']').test(answer) === false) {
                 console.log('\n  올바른 값을 입력해주세요!!');
                 process.exit();
+            } else if (answer >= 10){
+                console.log('\n  올바른 값을 입력해주세요!!');
+                process.exit();
             }
             answer = parseInt(answer) - 1;
             resolve(lectureLinkList[answer]);
@@ -240,7 +243,20 @@ exports.selectChapter = function (chapterFilesArr) {
 
     return new Promise(function (resolve, reject) {
         rl.question(selectQuestion, (answer) => {
-            if (new RegExp('[1-' + counter + ']').test(answer) === false) {
+            var regexTest;
+            if(counter >= 10){
+                var subTen = counter - 10;
+                if(answer >= 10){
+                    regexTest = new RegExp('1[0-'+ subTen+']').test(answer);
+                } else {
+                    regexTest = new RegExp('[0-9]').test(answer);
+                }
+
+            } else {
+                regexTest = new RegExp('[1-' + counter + ']').test(answer);
+            }
+
+            if (regexTest === false) {
                 console.log('\n  올바른 값을 입력해주세요!!');
                 process.exit();
             }
