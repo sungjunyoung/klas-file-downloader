@@ -1,0 +1,11 @@
+{
+  "name": "klasfd-desktop-app",
+  "version": "0.1.0",
+  "main": "main.js",
+  "devDependencies": {
+    "electron": "^1.6.10"
+  },
+  "dependencies": {
+    "klas-file-downloader": "^0.2.7"
+  }
+}

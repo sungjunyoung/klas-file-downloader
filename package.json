@@ -2,7 +2,7 @@
   "name": "klas-file-downloader",
   "version": "0.1.7",
   "description": "Project that download lecture reference files from Klas",
-  "main": "index.js",
+  "main": "module.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,7 +22,7 @@
     "url": "https://github.com/sungjunyoung/klas-file-downloader/issues"
   },
   "bin": {
-    "klasFD": "./index.js"
+    "klasFD": "./global.js"
   },
   "homepage": "https://sungjunyoung.github.io",
   "dependencies": {
