@@ -2,7 +2,10 @@
 
 경희대학교 클라스의 강의실 페이지에서 강의자료를 다운받을 수 있는 데스크탑 어플리케이션과 npm 패키지입니다.
 
-## SCREENSHOT
+## 미리보기
+[youtube](https://youtu.be/ECaec3YjU_A)
+
+## 스크린샷
 
 
 1. Mac / Windows Application
