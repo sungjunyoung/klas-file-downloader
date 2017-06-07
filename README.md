@@ -27,7 +27,7 @@ npm install -g klas-file-downloader
     1. Mac 
     2. Windows
     
-> **WARNING!!** 패스워드가 @ 이외의 특수문자를 포함하고 있다면, 패스워드 앞에  \ 를 붙여주어야 합니다.
+
 2. npm global package
 
     1. 강의의 특정 챕터의 파일만 다운로드하기
@@ -38,6 +38,7 @@ npm install -g klas-file-downloader
     ```
     klasFM -i 2012104095 -p \!123123\*123 --all
     ```
+    > **WARNING!!** 패스워드가 @ 이외의 특수문자를 포함하고 있다면, 패스워드 앞에  \ 를 붙여주어야 합니다.
 
 ### Options
 #### Global Options
