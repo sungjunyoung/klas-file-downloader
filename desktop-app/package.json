@@ -8,6 +8,7 @@
     "gulp": "^3.9.1"
   },
   "dependencies": {
+    "electron-connect": "^0.6.1",
     "klas-file-downloader": "^0.2.7",
     "sweetalert": "^1.1.3"
   }

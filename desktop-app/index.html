@@ -24,7 +24,7 @@
     <!-- style -->
     <link rel="stylesheet" type="text/css" href="style.css">
 
-    <script>require('electron-connect').client.create()</script>
+    <!--<script>require('electron-connect').client.create()</script>-->
     <script>if (window.module) module = window.module;</script>
 </head>
 <body>
@@ -46,28 +46,42 @@
         문의 : 경희대학교 컴공 12 성준영 ( wnsdud1861@gmail.com )
     </div>
 </div>
-
 <div class="loginForm">
     <div class="input-field col s6 id">
-        <input placeholder="2012104095" id="id" type="text" class="validat id">
+        <input onKeydown="if (event.keyCode ===13) $('#loginBtn').click()" placeholder="2012104095" id="id" type="text" class="validat inputLogin">
         <label for="pw">경희대학교 학번</label>
     </div>
     <div class="input-field col s6 pw">
-        <input placeholder="KLAS 비밀번호" id="pw" type="password" class="validat id">
+        <input onKeydown="if (event.keyCode ===13) $('#loginBtn').click()" placeholder="KLAS 비밀번호" id="pw" type="password" class="validat inputLogin">
         <label for="pw">KLAS 비밀번호</label>
     </div>
     <div class="loginBtnWrapper">
-        <button id="loginBtn" class="waves-effect waves-light btn #424242 grey darken-3">다운받으러 가기</button>
+        <button id="loginBtn" class="waves-effect waves-light btn #424242 grey darken-3">다운받으러 가기 (기본 자동로그인)</button>
     </div>
 </div>
 
-<div class="listWrapper">
+<div class="listWrapper" hidden="hidden">
     <div class="lectureListWrapper">
-
+        <div class="listDesc">자료를 다운로드할 강의를 선택하세요:)</div>
+        <div class="collection lectureCollection">
+        </div>
     </div>
     <div class="fileListWrapper">
-
+        <div class="listDesc">챕터선택 (클릭시 ~/Downloads 폴더에 저장됩니다.)</div>
+        <div class="collection chapterCollection">
+            <div class="selectChapter">강의를 선택하세요!</div>
+        </div>
     </div>
+    <a class="btn-floating btn-large waves-effect waves-light grey darken-3 downloadAll">전체다운</a>
+</div>
+
+<div class="loadingLayer" hidden="hidden">
+    <div id="loading"></div>
+    <div id="loadingText"><br/>잠시만 기다려주세요!</div>
+</div>
+
+<div id="logout" hidden="hidden">
+    < 로그아웃
 </div>
 
 

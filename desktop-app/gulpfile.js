@@ -9,5 +9,5 @@ gulp.task('default', function () {
 // Restart browser process
     gulp.watch('app.js', electron.restart);
 // Reload renderer process
-    gulp.watch(['index.html', 'style.css', 'logic.js'], electron.reload);
+    gulp.watch(['index.html', 'style.css'], electron.reload);
 });

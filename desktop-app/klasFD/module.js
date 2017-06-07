@@ -32,3 +32,23 @@ exports.isValidIdPw = function(id, pw, cb){
             cb(false);
         })
 };
+
+exports.downloadSelectedFiles = function(selectedChapter, selectedLecture, cb){
+    functions.downloadSelectedFiles(selectedChapter, selectedLecture,null)
+        .then(function(res){
+            cb(res);
+        })
+        .catch(function(err){
+            cb(err);
+        })
+};
+
+exports.downloadAllFiles = function(selectedFilesArr, selectedLecture, cb){
+    functions.downloadAllFiles(selectedFilesArr, selectedLecture,null)
+        .then(function(res){
+            cb(res);
+        })
+        .catch(function(err){
+            cb(err);
+        })
+};
