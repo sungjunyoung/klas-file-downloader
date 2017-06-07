@@ -1,6 +1,6 @@
 {
   "name": "klas-file-downloader",
-  "version": "0.1.7",
+  "version": "1.0.0",
   "description": "Project that download lecture reference files from Klas",
   "main": "module.js",
   "scripts": {

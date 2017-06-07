@@ -63,7 +63,7 @@ exports.getLecture = function () {
         }, function (err, res, body) {
             if (err) {
                 console.log(err);
-                reject({code:'PARSING_ERR', message: '  파싱 중 에러가 발생했어요!'});
+                reject({code:'CONNECT_ERR', message: '  페이지 접근 중 에러가 발생했어요!'});
             } else {
                 resolve(body);
             }
@@ -99,7 +99,11 @@ exports.getLectureLink = function (getLectureBody) {
             lectureLinkList[i].link = 'https://klas.khu.ac.kr' + $(this).attr('href')
         });
 
-        resolve(lectureLinkList);
+        if(lectureLinkList.length === 0){
+            reject({code:'LOGIN_ERR', message: '  학번과 비밀번호를 확인해주세요!'});
+        } else {
+            resolve(lectureLinkList);
+        }
 
     })
 };
@@ -160,16 +164,18 @@ exports.getClassPageBody = function (lectureLinkObj) {
 
     return new Promise(function (resolve, reject) {
 
-        let url = lectureLinkObj.link;
+        let pageUrl = lectureLinkObj.link;
 
         let headers = {
             'Cookie': 'COURSE_MENU_NAME=%uAC15%uC758%uC2E4',
             'User-Agent': 'request'
         };
 
+        let request = require('request');
+
         request({
-            url: url,
-            mothod: 'GET',
+            url: pageUrl,
+            method: 'GET',
             jar: j,
             headers: headers,
             timeout: 3000
@@ -279,6 +285,7 @@ exports.downloadSelectedFiles = function (selectedFiles, selectLecture, download
 
     return new Promise(function (resolve, reject) {
 
+
         if (!downloadPath) {
             downloadPath = os.homedir() + '/Downloads/';
         } else {
@@ -296,6 +303,9 @@ exports.downloadSelectedFiles = function (selectedFiles, selectLecture, download
         downloadPath += selectedFiles.chapter + '/';
 
         let count = 0;
+        if(selectedFiles.files.length === 0){
+            reject({code: 'NO_FILES',message:'  해당 챕터에 해당하는 파일이 없어요!!'});
+        }
         selectedFiles.files.forEach(function (value, index) {
             request = https.get(value.link, function (response) {
 
@@ -334,18 +344,32 @@ exports.downloadAllFiles = function (chapterFilesArr, selectLecture, downloadPat
 
         let count = 0;
         chapterFilesArr.forEach(function (chapterObj, index) {
+
+
             var asyncDownloadPath = downloadPath + chapterObj.chapter + '/';
 
             if (!fs.existsSync(asyncDownloadPath))
                 fs.mkdirSync(asyncDownloadPath);
 
             var subCount = 0;
+
+            if(chapterFilesArr.length-1 === count){
+                resolve('\n  파일이 ' + downloadPath + ' 에 저장되었어요! 열공 :)');
+            }
+            if(chapterObj.files.length === 0){
+                count ++;
+                return;
+            }
+
             chapterObj.files.forEach(function (value, index) {
                 request = https.get(value.link, function (response) {
+
                     let file = fs.createWriteStream(asyncDownloadPath + value.fileName);
                     response.pipe(file);
 
                     subCount++;
+
+
                     if (subCount === chapterObj.files.length) {
                         count++;
                         console.log('   다운로드중... (' + asyncDownloadPath + ')');

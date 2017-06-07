@@ -3,7 +3,7 @@
  */
 
 
-let klasFD = require('./klasFD/module');
+let klasFD = require('klas-file-downloader');
 
 let userLectures = [];
 let lectureFiles = [];
@@ -116,6 +116,7 @@ $(document).ready(function () {
 
         const lectureIndex = $a.attr('href').substr(1);
         selectedLecture = userLectures[lectureIndex].lectureName;
+
         renderChapterList(userLectures[lectureIndex]);
     });
 
@@ -126,13 +127,26 @@ $(document).ready(function () {
         disableAll('강의자료를 다운로드하고 있습니다..');
         klasFD.downloadSelectedFiles(lectureFiles[chapterIndex], selectedLecture, function (res) {
             ableAll();
-            swal({
-                title: '다운로드 완료',
-                text: res,
-                type: "success",
-                confirmButtonText: "OK",
-                confirmButtonColor: "#424242",
-            });
+            if(res.code){
+                // 에러
+                swal({
+                    title: '다운로드 실패',
+                    text: res.message,
+                    type: "error",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#424242",
+                });
+            } else {
+
+                swal({
+                    title: '다운로드 완료',
+                    text: res,
+                    type: "success",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#424242",
+                });
+            }
+
         })
     });
 
@@ -184,7 +198,6 @@ $(document).ready(function () {
 
     // 사용자의 강의 리스트 렌더
     function renderLectureList() {
-        console.log(userLectures);
         for (let i in userLectures) {
             $('.lectureCollection')
                 .append('<a href="#' + i + '" class="collection-item grey-text text-darken-3 my-lecture">'
@@ -194,10 +207,10 @@ $(document).ready(function () {
 
     // 선택한 강의의 챕터 렌더
     function renderChapterList(lectureObj) {
-        console.log(lectureObj);
+        disableAll('강의의 챕터를 불러오는 중입니다...');
         klasFD.getLectureFileLinks(lectureObj, function (fileList) {
+            ableAll();
             lectureFiles = fileList;
-            console.log(fileList);
             $('.chapterCollection').empty();
             if (fileList.length === 0) {
                 $('.chapterCollection')
@@ -231,8 +244,8 @@ $(document).ready(function () {
         $('.imageWrapper').attr('style', 'height: 300px;');
         $('.listWrapper').hide();
         $('#logout').hide();
-        $('#id').text('');
-        $('#pw').text('');
+        $('#id').val('');
+        $('#pw').val('');
     }
 
     function disableAll(text) {
