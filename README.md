@@ -6,9 +6,11 @@
 
 
 1. Mac / Windows Application
+
 ![screenshot_2](screenshot_2.png)
 
 2. global package
+
 ![screenshot_1](screenshot_1.png)
 
 ## INSTALL
@@ -21,11 +23,13 @@ npm install -g klas-file-downloader
 
 
 1. Mac / Windows Application (추후 추가예정)
+
     1. Mac 
     2. Windows
     
 > **WARNING!!** 패스워드가 @ 이외의 특수문자를 포함하고 있다면, 패스워드 앞에  \ 를 붙여주어야 합니다.
 2. npm global package
+
     1. 강의의 특정 챕터의 파일만 다운로드하기
     ```
     klasFM -i 2012104095 -p \!123123\*123
