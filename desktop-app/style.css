@@ -1,5 +1,91 @@
-
 @font-face {
-    font-family:'BMDOHYEON';
-    src: url(/public/fonts/BMDOHYEON.ttf) format('truetype');
+    font-family: 'BMDOHYEON';
+    src: url(public/fonts/BMDOHYEON.ttf) format('truetype');
+}
+
+body {
+    margin: 0;
+}
+
+.logoTitle {
+    width: 100%;
+}
+
+.imageWrapper {
+    background: url(public/images/main_image.gif) center center no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 300px;
+}
+
+.layer {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+}
+
+.title {
+    position: fixed;
+    top: 120px;
+    right: 30px;
+    font-family: BMDOHYEON;
+    font-size: 40px;
+    color: white
+}
+
+.desc {
+    font-size: 12px;
+    text-align: right;
+    position: fixed;
+    top: 190px;
+    right: 30px;
+    font-family: Arial;
+    color: #ffffff;
+}
+
+.me {
+    text-align: right;
+    position: fixed;
+    top: 260px;
+    right: 30px;
+    font-family: Arial;
+    color: #ffffff;
+}
+
+.loginForm {
+    width: 100%;
+    height: auto;
+    padding: 3% 5% 3% 5%;
+}
+
+.id, .pw {
+    padding: 2%;
+    width: 49%;
+    display: inline-block;
+}
+
+.loginBtnWrapper {
+
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+}
+
+/* label focus color */
+.input-field input[type=text]:focus + label, .input-field input[type=password]:focus + label {
+    color: #424242;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus, .input-field input[type=password]:focus {
+    border-bottom: 1px solid #424242;
+    box-shadow: 0 1px 0 0 #424242;
+}
+
+#loginBtn {
+    width: 100%;
 }

@@ -38,7 +38,7 @@ if (!flags.id) {
                 console.log(result);
             })
             .catch(function (err) {
-                console.log(err);
+                console.log(err.message);
             });
     } else {
         var selectLecture;
@@ -58,7 +58,7 @@ if (!flags.id) {
                 console.log(result);
             })
             .catch(function (err) {
-                console.log(err);
+                console.log(err.message);
             })
 
     }

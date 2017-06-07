@@ -1,11 +1,14 @@
 {
   "name": "klasfd-desktop-app",
   "version": "0.1.0",
-  "main": "main.js",
+  "main": "app.js",
   "devDependencies": {
-    "electron": "^1.6.10"
+    "electron": "^1.6.10",
+    "electron-connect": "^0.6.1",
+    "gulp": "^3.9.1"
   },
   "dependencies": {
-    "klas-file-downloader": "^0.2.7"
+    "klas-file-downloader": "^0.2.7",
+    "sweetalert": "^1.1.3"
   }
 }

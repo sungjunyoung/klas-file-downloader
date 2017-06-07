@@ -22,3 +22,13 @@ exports.getLectureFileLinks = function(lectureLink, cb){
             cb(err);
         })
 };
+
+exports.isValidIdPw = function(id, pw, cb){
+    functions.login(id, pw)
+        .then(function(){
+            cb(true);
+        })
+        .catch(function(){
+            cb(false);
+        })
+};

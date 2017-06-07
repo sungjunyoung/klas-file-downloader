@@ -11,16 +11,65 @@
 
     <!-- jquery  -->
     <script src="public/js/jquery-3.2.1.min.js"></script>
+    <!-- materizlize -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
 
+    <!-- sweetalert -->
+    <script src="public/js/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="public/css/sweetalert.css">
+
+    <!-- style -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script>require('electron-connect').client.create()</script>
     <script>if (window.module) module = window.module;</script>
-
 </head>
 <body>
-<script src="./logics.js"></script>
+<script src="./logic.js"></script>
 
-<h1>KLAS FILE DOWNLOADER</h1>
+<div class="logoTitle">
+    <div class="imageWrapper">
+        <div class="layer">
+        </div>
+    </div>
+
+    <div class="title">KLAS 강의자료 다운로더</div>
+    <div class="desc">
+        강의자료를 다운받는 절차가 너무 귀찮아 만들게 되었습니다. <br/>
+        사실 만들고 나니까 이래나 저래나 귀찮긴 마찬가지인 것 같습니다. <br/>
+        아이디 / 패스워드는 로컬에만 저장되니 안심하고 사용하세요 :)
+    </div>
+    <div class="me">
+        문의 : 경희대학교 컴공 12 성준영 ( wnsdud1861@gmail.com )
+    </div>
+</div>
+
+<div class="loginForm">
+    <div class="input-field col s6 id">
+        <input placeholder="2012104095" id="id" type="text" class="validat id">
+        <label for="pw">경희대학교 학번</label>
+    </div>
+    <div class="input-field col s6 pw">
+        <input placeholder="KLAS 비밀번호" id="pw" type="password" class="validat id">
+        <label for="pw">KLAS 비밀번호</label>
+    </div>
+    <div class="loginBtnWrapper">
+        <button id="loginBtn" class="waves-effect waves-light btn #424242 grey darken-3">다운받으러 가기</button>
+    </div>
+</div>
+
+<div class="listWrapper">
+    <div class="lectureListWrapper">
+
+    </div>
+    <div class="fileListWrapper">
+
+    </div>
+</div>
 
 
-<button class="testBtn">테스트</button>
 </body>
 </html>

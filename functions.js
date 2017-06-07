@@ -35,14 +35,14 @@ exports.login = function (id, pw) {
         }, function (err, res, body) {
             if (err) {
                 if (err.code === 'ESOCKETTIMEDOUT') {
-                    reject('  클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
+                    reject({code:'KLAS_TIMEOUT', message: '  클라스 요청 응답시간이 너무 길어요... ㅠㅠ'});
                 } else {
-                    reject('  알수없는 에러가 발생했어요!.');
+                    reject({code:'UNKNOWN_ERR', message: '  알수없는 에러가 발생했어요!'});
                 }
             } else if (j.getCookies("https://klas.khu.ac.kr").length === 0) {
-                reject('  로그인에 실패했습니다!');
+                reject({code:'LOGIN_FAIL', message: '  로그인에 실패했어요!'});
             } else {
-                resolve('success');
+                resolve({code:'SUCCESS'});
             }
         })
     });
@@ -63,7 +63,7 @@ exports.getLecture = function () {
         }, function (err, res, body) {
             if (err) {
                 console.log(err);
-                reject('  파싱 중 에러가 발생했어요!');
+                reject({code:'PARSING_ERR', message: '  파싱 중 에러가 발생했어요!'});
             } else {
                 resolve(body);
             }
@@ -153,14 +153,14 @@ exports.selectLecture = function (lectureLinkList) {
 /**
  * @author sungjunyoung
  * @description 강의실 링크의 url 을 받아서 HTML 를 리턴해주는 함수
- * @param {String} lectureLink - 강의실 URL
+ * @param {String} lectureLinkObj - 강의명, 링크 오브젝트
  * @returns {*|Promise}
  */
-exports.getClassPageBody = function (lectureLink) {
+exports.getClassPageBody = function (lectureLinkObj) {
 
     return new Promise(function (resolve, reject) {
 
-        let url = lectureLink.link;
+        let url = lectureLinkObj.link;
 
         let headers = {
             'Cookie': 'COURSE_MENU_NAME=%uAC15%uC758%uC2E4',
@@ -176,9 +176,9 @@ exports.getClassPageBody = function (lectureLink) {
         }, function (err, res, body) {
             if (err) {
                 if (err.code === 'ESOCKETTIMEDOUT') {
-                    reject('  클라스 요청 응답시간이 너무 길어요... ㅠㅠ');
+                    reject({code:'KLAS_TIMEOUT', message: '  클라스 요청 응답시간이 너무 길어요... ㅠㅠ'});
                 } else {
-                    reject('  알수없는 에러가 발생했어요!.');
+                    reject({code:'UNKNOWN_ERR', message: '  알수없는 에러가 발생했어요!.'});
                 }
             } else {
                 resolve(body);
