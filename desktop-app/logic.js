@@ -60,9 +60,11 @@ $(document).ready(function () {
         let id = $('#id').val();
         let pw = $('#pw').val();
 
+        userLectures = [];
+        lectureFiles = [];
+        selectedLecture = '';
         disableAll('로그인 중입니다...');
         klasFD.getLectureList(id, pw, function (res) {
-
             console.log(res);
             if (res.code) {
                 ableAll();
@@ -246,6 +248,7 @@ $(document).ready(function () {
         $('#logout').hide();
         $('#id').val('');
         $('#pw').val('');
+        location.reload();
     }
 
     function disableAll(text) {
