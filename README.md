@@ -13,22 +13,29 @@
 
 ![screenshot_1](screenshot_1.png)
 
-## INSTALL
+## 설치
+1. Mac / Windows Application
 
-```
-npm install -g klas-file-downloader 
-```
-
-## USAGE
-
-
-1. Mac / Windows Application (추후 추가예정)
-
-    1. Mac 
-    2. Windows
+    1. Mac : https://s3.ap-northeast-2.amazonaws.com/sungjunyoung-repository/KLAS%E1%84%91%E1%85%A1%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%83%E1%85%A1%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%85%E1%85%A9%E1%84%83%E1%85%A5.dmg
+    > Mac : DMG 파일을 설치한 후 파인더에서 ~/Applications/KLAS파일다운로더 를 찾아 오른쪽클릭 후 열기 
     
+    2. Windows : https://s3.ap-northeast-2.amazonaws.com/sungjunyoung-repository/KLASFD-Setup.exe
 
 2. npm global package
+
+    ```
+    npm install -g klas-file-downloader 
+    ```
+    
+3. npm module
+    ```
+    npm install --save klas-file-downloader
+    ```
+    > 일단은 써놨는데 부끄러워서 사용법은 써놓지 않겠습니다. ><
+
+## 사용법
+
+1. npm global package
 
     1. 강의의 특정 챕터의 파일만 다운로드하기
     ```
@@ -39,6 +46,7 @@ npm install -g klas-file-downloader
     klasFM -i 2012104095 -p \!123123\*123 --all
     ```
     > **WARNING!!** 패스워드가 @ 이외의 특수문자를 포함하고 있다면, 패스워드 앞에  \ 를 붙여주어야 합니다.
+    
 
 ### Options
 #### Global Options
