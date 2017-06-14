@@ -20,16 +20,17 @@
 1. Mac / Windows Application
 
     1. Mac : https://s3.ap-northeast-2.amazonaws.com/sungjunyoung-repository/KLAS%E1%84%91%E1%85%A1%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%83%E1%85%A1%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%85%E1%85%A9%E1%84%83%E1%85%A5.dmg
-    > Mac : DMG 파일을 설치한 후 파인더에서 ~/Applications/KLAS파일다운로더 를 찾아 오른쪽클릭 후 열기 
-    
+    > Mac : DMG 파일을 설치한 후 파인더에서 ~/Applications/KLAS파일다운로더 를 찾아 오른쪽클릭 후 열기
+
     2. Windows : https://s3.ap-northeast-2.amazonaws.com/sungjunyoung-repository/KLASFD-Setup.exe
+    > 64bit 에서만 정상적으로 동작합니다.
 
 2. npm global package
 
     ```
-    npm install -g klas-file-downloader 
+    npm install -g klas-file-downloader
     ```
-    
+
 3. npm module
     ```
     npm install --save klas-file-downloader
@@ -49,7 +50,7 @@
     klasFD -i 2012104095 -p \!123123\*123 --all
     ```
     > **WARNING!!** 패스워드가 @ 이외의 특수문자를 포함하고 있다면, 패스워드 앞에  \ 를 붙여주어야 합니다.
-    
+
 
 ### Options
 #### Global Options

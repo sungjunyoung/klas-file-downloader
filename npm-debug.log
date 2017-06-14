@@ -1,0 +1,95 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/Cellar/node/8.0.0_1/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/junyoung/Library/Mobile Documents/com~apple~CloudDocs/Junyoung/Projects/klas-file-downloader',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/junyoung/.npm/klas-file-downloader/1.0.1/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/junyoung/.npm correctMkdir not in flight; initializing
+10 info lifecycle klas-file-downloader@1.0.1~prepublish: klas-file-downloader@1.0.1
+11 silly lifecycle klas-file-downloader@1.0.1~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/Users/junyoung/.npm/klas-file-downloader/1.0.1/package.tgz',
+12 verbose tar pack   '/Users/junyoung/Library/Mobile Documents/com~apple~CloudDocs/Junyoung/Projects/klas-file-downloader' ]
+13 verbose tarball /Users/junyoung/.npm/klas-file-downloader/1.0.1/package.tgz
+14 verbose folder /Users/junyoung/Library/Mobile Documents/com~apple~CloudDocs/Junyoung/Projects/klas-file-downloader
+15 verbose addLocalTarball adding from inside cache /Users/junyoung/.npm/klas-file-downloader/1.0.1/package.tgz
+16 verbose correctMkdir /Users/junyoung/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd klas-file-downloader@1.0.1
+18 verbose afterAdd /Users/junyoung/.npm/klas-file-downloader/1.0.1/package/package.json not in flight; writing
+19 verbose correctMkdir /Users/junyoung/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /Users/junyoung/.npm/klas-file-downloader/1.0.1/package/package.json written
+21 silly publish { name: 'klas-file-downloader',
+21 silly publish   version: '1.0.1',
+21 silly publish   description: 'Project that download lecture reference files from Klas',
+21 silly publish   main: 'module.js',
+21 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+https://github.com/sungjunyoung/klas-file-downloader.git' },
+21 silly publish   keywords: [ 'klas', 'file', 'download', 'lecture' ],
+21 silly publish   author: { name: 'sungjunyoung' },
+21 silly publish   license: 'MIT',
+21 silly publish   bugs: { url: 'https://github.com/sungjunyoung/klas-file-downloader/issues' },
+21 silly publish   bin: { klasFD: './global.js' },
+21 silly publish   homepage: 'https://sungjunyoung.github.io',
+21 silly publish   dependencies:
+21 silly publish    { args: '^2.4.1',
+21 silly publish      cheerio: '^0.22.0',
+21 silly publish      fs: '0.0.1-security',
+21 silly publish      promise: '^7.1.1',
+21 silly publish      querystring: '^0.2.0',
+21 silly publish      read: '^1.0.7',
+21 silly publish      request: '^2.81.0' },
+21 silly publish   devDependencies: { 'electron-winstaller': '^2.6.1' },
+21 silly publish   readme: '# klas-file-downloader\n\n경희대학교 클라스의 강의실 페이지에서 강의자료를 다운받을 수 있는 데스크탑 어플리케이션과 npm 패키지입니다.\n\n## 미리보기\n[youtube](https://youtu.be/ECaec3YjU_A)\n\n## 스크린샷\n\n\n1. Mac / Windows Application\n\n![screenshot_2](screenshot_2.png)\n\n2. global package\n\n![screenshot_1](screenshot_1.png)\n\n## 설치\n1. Mac / Windows Application\n\n    1. Mac : https://s3.ap-northeast-2.amazonaws.com/sungjunyoung-repository/KLAS%E1%84%91%E1%85%A1%E1%84%8B%E1%85%B5%E1%86%AF%E1%84%83%E1%85%A1%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%85%E1%85%A9%E1%84%83%E1%85%A5.dmg\n    > Mac : DMG 파일을 설치한 후 파인더에서 ~/Applications/KLAS파일다운로더 를 찾아 오른쪽클릭 후 열기 \n    \n    2. Windows : https://s3.ap-northeast-2.amazonaws.com/sungjunyoung-repository/KLASFD-Setup.exe\n\n2. npm global package\n\n    ```\n    npm install -g klas-file-downloader \n    ```\n    \n3. npm module\n    ```\n    npm install --save klas-file-downloader\n    ```\n    > 일단은 써놨는데 부끄러워서 사용법은 써놓지 않겠습니다. ><\n\n## 사용법\n\n1. npm global package\n\n    1. 강의의 특정 챕터의 파일만 다운로드하기\n    ```\n    klasFD -i 2012104095 -p \\!123123\\*123\n    ```\n    2. 강의의 전체 자료 다운로드하기\n    ```\n    klasFD -i 2012104095 -p \\!123123\\*123 --all\n    ```\n    > **WARNING!!** 패스워드가 @ 이외의 특수문자를 포함하고 있다면, 패스워드 앞에  \\ 를 붙여주어야 합니다.\n    \n\n### Options\n#### Global Options\n0. `-h / --help` : 도움말\n1. `-i / --id` : **[required]** 학번\n2. `-p / --pw` : **[required]** 비밀번호\n3. `-d / --downloadPath` : 다운로드 받을 경로\n4. `-a / --all` : 추가 시 선택한 강의의 전체 강의자료 다운로드\n\n\n---\nMIT License\n\nCopyright (c) 2017 Junyoung, Sung\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: 'dce5a84ee4b9cfd82df131c0946a3b170aa0893c',
+21 silly publish   _id: 'klas-file-downloader@1.0.1',
+21 silly publish   _shasum: 'f3051add6a2f30eefd6d85bf1a31b497fcb1bed9',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name klas-file-downloader
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'klas-file-downloader',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'klas-file-downloader',
+26 silly mapToRegistry   name: 'klas-file-downloader',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/klas-file-downloader
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /Users/junyoung/.npm/klas-file-downloader/1.0.1/package.tgz
+30 verbose stack Error: "toString()" failed
+30 verbose stack     at Buffer.toString (buffer.js:495:11)
+30 verbose stack     at CachingRegistryClient.putFirst (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/publish.js:97:23)
+30 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/publish.js:54:14
+30 verbose stack     at ConcatStream.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/node_modules/concat-stream/index.js:36:43)
+30 verbose stack     at emitNone (events.js:91:20)
+30 verbose stack     at ConcatStream.emit (events.js:185:7)
+30 verbose stack     at finishMaybe (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:475:14)
+30 verbose stack     at endWritable (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:485:3)
+30 verbose stack     at ConcatStream.Writable.end (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:455:41)
+30 verbose stack     at ReadStream.onend (_stream_readable.js:511:10)
+31 verbose cwd /Users/junyoung/Library/Mobile Documents/com~apple~CloudDocs/Junyoung/Projects/klas-file-downloader
+32 error Darwin 16.6.0
+33 error argv "/usr/local/Cellar/node/8.0.0_1/bin/node" "/usr/local/bin/npm" "publish"
+34 error node v6.11.0
+35 error npm  v3.10.10
+36 error "toString()" failed
+37 error If you need help, you may report this error at:
+37 error     <https://github.com/npm/npm/issues>
+38 verbose exit [ 1, true ]
