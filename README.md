@@ -1,6 +1,6 @@
 # klas-file-downloader
 
-경희대학교 클라스의 강의실 페이지에서 강의자료를 다운받을 수 있는 데스크탑 어플리케이션과 npm 패키지입니다.
+경희대학교 클라스의 강의실 페이지에서 강의자료를 다운받을 수 있는 데스크탑 어플리케이션입니다.
 
 ## 미리보기
 [youtube](https://youtu.be/ECaec3YjU_A)
@@ -30,12 +30,6 @@
     ```
     npm install -g klas-file-downloader
     ```
-
-3. npm module
-    ```
-    npm install --save klas-file-downloader
-    ```
-    > 일단은 써놨는데 부끄러워서 사용법은 써놓지 않겠습니다. ><
 
 ## 사용법
 
